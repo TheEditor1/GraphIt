@@ -148,6 +148,8 @@ function GraphIt(dataObj,cacheImgs,c) {
         topInnerPad = yAxisLength*0.04;
         bottomInnerPad = yAxisLength*0.04;
 
+		console.log("HI")
+
         function xpos(x) { // Maps points onto chart on canvas
             if (scaleX[1]>=x && x>=scaleX[0]) {
                 let newX = xChartStart + incrementsX*(x-scaleX[0]);
@@ -158,7 +160,6 @@ function GraphIt(dataObj,cacheImgs,c) {
                 return MINIMATO;
             }
         }
-
         function ypos(y) {
             if (scaleY[1]>=y && y>=scaleY[0]) {
                 let newY = yChartEnd - incrementsY*(y-scaleY[0]);
