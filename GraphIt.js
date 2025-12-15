@@ -2,8 +2,6 @@ function GraphIt(dataObj,cacheImgs,c) {
     /* Constants for where a point goes off the graph */
     const MAXIMATO = [Infinity,undefined]; 
     const MINIMATO = [-Infinity,undefined];
-
-	console.log("HI")
     
     /*
         dataObj = {
@@ -40,6 +38,7 @@ function GraphIt(dataObj,cacheImgs,c) {
     if (c.getContext) { // Create our chart
         ctx = c.getContext("2d");
         ctx.clearRect(0,0,c.width,c.height);
+
 
         XMax = c.width;
         YMax = c.height;
@@ -150,8 +149,6 @@ function GraphIt(dataObj,cacheImgs,c) {
         topInnerPad = yAxisLength*0.04;
         bottomInnerPad = yAxisLength*0.04;
 
-		
-
         function xpos(x) { // Maps points onto chart on canvas
             if (scaleX[1]>=x && x>=scaleX[0]) {
                 let newX = xChartStart + incrementsX*(x-scaleX[0]);
@@ -162,6 +159,7 @@ function GraphIt(dataObj,cacheImgs,c) {
                 return MINIMATO;
             }
         }
+
         function ypos(y) {
             if (scaleY[1]>=y && y>=scaleY[0]) {
                 let newY = yChartEnd - incrementsY*(y-scaleY[0]);
@@ -177,6 +175,12 @@ function GraphIt(dataObj,cacheImgs,c) {
             GraphIt(data,this.cache,c)
         }
 
+        function background() {
+            ctx.fillStyle = "white";
+            ctx.beginPath();
+            ctx.rect(0,0,XMax,YMax);
+            ctx.fill();
+        }
         
 
         function drawPoints() {
@@ -764,6 +768,7 @@ function GraphIt(dataObj,cacheImgs,c) {
         }
 
         /* Render order */
+        background();
         if (dataObj.fills != undefined) RenderFills();
         if (dataObj.names != undefined) RenderData();
         RenderZeroLines();
@@ -838,3 +843,4 @@ function argdef(def,arg) { // Return default value if argument isn't a number
 function strip(number) { // Preventing javascript floating point instanity
     return +(parseFloat(number).toPrecision(12));
 }
+
