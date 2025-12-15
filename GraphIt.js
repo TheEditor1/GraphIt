@@ -2,6 +2,8 @@ function GraphIt(dataObj,cacheImgs,c) {
     /* Constants for where a point goes off the graph */
     const MAXIMATO = [Infinity,undefined]; 
     const MINIMATO = [-Infinity,undefined];
+
+	console.log("HI")
     
     /*
         dataObj = {
@@ -148,7 +150,7 @@ function GraphIt(dataObj,cacheImgs,c) {
         topInnerPad = yAxisLength*0.04;
         bottomInnerPad = yAxisLength*0.04;
 
-		console.log("HI")
+		
 
         function xpos(x) { // Maps points onto chart on canvas
             if (scaleX[1]>=x && x>=scaleX[0]) {
