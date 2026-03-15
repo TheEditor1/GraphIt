@@ -155,7 +155,7 @@ function GraphIt(dataObj,cacheImgs,c) {
                 return newX;
             } else if (scaleX[1]<x) {
                 return MAXIMATO;
-            } else if (scale[0]>x) {
+            } else if (scaleX[0]>x) {
                 return MINIMATO;
             }
         }
@@ -285,21 +285,29 @@ function GraphIt(dataObj,cacheImgs,c) {
         function RenderEquationLegend(useCachedEquations,eqns) { // Render the legend as equations
             //eqnHeightGuess = 80;
             cachedImages = [];
+            
 
             if (useCachedEquations) { // When the canvas is rerendered
                 for (i=0; i<dataObj.names.length; i++) {
-                    name = dataObj.names[i];
-                    pos = dataObj.equationPositions[name];
-                    renderEqnImageToCanvas(eqns[i],[xpos(scaleX[1]*pos[0]),ypos(scaleY[1]*pos[1])]);
+                    let name = dataObj.names[i];
+                    let pos = dataObj.equationPositions[name];
+
+                    let XPOS = (xDist*pos[0]) + scaleX[0];
+                    let YPOS = (yDist*pos[1]) + scaleY[0];
+                    //renderEqnImageToCanvas(eqns[i],[xpos(scaleX[1]*pos[0]),ypos(scaleY[1]*pos[1])]);
+                    renderEqnImageToCanvas(eqns[i],[xpos(XPOS),ypos(YPOS)]);
                 }
                 return cachedImages;
             }
             else { // When canvas is rendered the first time
                 for (i=0; i<dataObj.names.length; i++) {
-                    name = dataObj.names[i];
-                    pos = dataObj.equationPositions[name];
-                    cachedImages[i] = RenderEquns(dataObj.equations[i],[xpos(scaleX[1]*pos[0]),ypos(scaleY[1]*pos[1])]);
-                    
+                    let name = dataObj.names[i];
+                    let pos = dataObj.equationPositions[name];
+
+                    let XPOS = (xDist*pos[0]) + scaleX[0];
+                    let YPOS = (yDist*pos[1]) + scaleY[0];
+                    // cachedImages[i] = RenderEquns(dataObj.equations[i],[xpos(scaleX[1]*pos[0]),ypos(scaleY[1]*pos[1])]);
+                    cachedImages[i] = RenderEquns(dataObj.equations[i],[xpos(XPOS),ypos(YPOS)]);
                 }
             }
             return cachedImages;
@@ -309,14 +317,18 @@ function GraphIt(dataObj,cacheImgs,c) {
             const pos = dataObj.legendPosition;
             const startPos = pos[0];
             const endPos = pos[1];
-            const x0 = xpos(scaleX[1]*startPos[0]);
-            const y0 = ypos(scaleY[1]*startPos[1]);
-            const x1 = xpos(scaleX[1]*endPos[0]);
-            const y1 = ypos(scaleY[1]*endPos[1]);
+            // const x0 = xpos(scaleX[1]*startPos[0]);
+            // const y0 = ypos(scaleY[1]*startPos[1]);
+            // const x1 = xpos(scaleX[1]*endPos[0]);
+            // const y1 = ypos(scaleY[1]*endPos[1]);
+            const x = xpos(scaleX[1]*startPos[0]);
+            const y = ypos(scaleY[1]*startPos[1]);
+            const width = xAxisLength*endPos[0];
+            const height = yAxisLength*endPos[1];
 
             ctx.fillStyle = "white";
             ctx.beginPath();
-            ctx.rect(x0,y0,x1,y1);
+            ctx.rect(x,y,width,height);
             ctx.fill();
         }
 
@@ -449,8 +461,8 @@ function GraphIt(dataObj,cacheImgs,c) {
                 ctx.beginPath();
 
                 newTickXPos = xpos(pX);
-                ctx.moveTo(newTickXPos+tickWidth/4, yChartEnd);
-                ctx.lineTo(newTickXPos+tickWidth/4, yChartEnd + tickSize);
+                ctx.moveTo(newTickXPos, yChartEnd);
+                ctx.lineTo(newTickXPos, yChartEnd + tickSize);
                 ctx.stroke();
 
                 // Draw X Labels
@@ -487,8 +499,8 @@ function GraphIt(dataObj,cacheImgs,c) {
                         ctx.beginPath();
 
                         newTickXPos = xpos(pX);
-                        ctx.moveTo(newTickXPos+tickWidth/4, yChartEnd);
-                        ctx.lineTo(newTickXPos+tickWidth/4, yChartEnd + tickSize);
+                        ctx.moveTo(newTickXPos, yChartEnd);
+                        ctx.lineTo(newTickXPos, yChartEnd + tickSize);
                         ctx.stroke();
 
                         // Draw X Labels
@@ -527,8 +539,8 @@ function GraphIt(dataObj,cacheImgs,c) {
                         ctx.beginPath();
 
                         newTickXPos = xpos(pX);
-                        ctx.moveTo(newTickXPos+tickWidth/4, yChartEnd);
-                        ctx.lineTo(newTickXPos+tickWidth/4, yChartEnd + tickSize*0.8);
+                        ctx.moveTo(newTickXPos, yChartEnd);
+                        ctx.lineTo(newTickXPos, yChartEnd + tickSize*0.8);
                         ctx.stroke();
 
                         totalTicks++; // Only include ticks actually made
@@ -678,13 +690,13 @@ function GraphIt(dataObj,cacheImgs,c) {
             /// Y-axis
             ctx.beginPath();
             ctx.moveTo(xChartStart, yChartStart);
-            ctx.lineTo(xChartStart, yChartEnd);
+            ctx.lineTo(xChartStart, yChartEnd + tickWidth/2);
             ctx.stroke();
 
             /// X-axis
             ctx.beginPath();
             ctx.moveTo(xChartStart, yChartEnd);
-            ctx.lineTo(xChartEnd, yChartEnd);
+            ctx.lineTo(xChartEnd + tickWidth/2, yChartEnd);
             ctx.stroke();
 
             /// Title 
