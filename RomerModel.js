@@ -38,9 +38,9 @@ function RomerModel(params) {
     if (g<0) g=0;
     
     /* Solving */
-    var r = g*s-rho;
+    var r = g*s+rho;
     var Hy = (1/d)*Lambda*r;
-    if (Hy<0) Hy=0
+    if (Hy<0) Hy=0;
     else if (Hy>H) Hy=H;
     var Ha = H - Hy;
     var p = (r*eta)/(1-a-b);
@@ -58,6 +58,10 @@ function RomerModel(params) {
         x: x,
         Pa: Pa,
         monopolyProfits: monopolyProfits,
+    }
+
+    this.rerun = function(newParams) {
+        return new RomerModel(newParams)
     }
 
     this.SteadyState = function () {
@@ -100,6 +104,7 @@ function RomerModelSP(params) {
     var eta = params.eta;
 
     var Theta = a/(a+b);
+    var Lambda = a/((a+b)*(1-a-b));
 
     /* Rate of growth */
     var g = (d*H - Theta*rho)/((1-Theta)+Theta*s); 
